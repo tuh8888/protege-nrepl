@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package uk.org.russet.protege;
+package ucdenver.ccp.protege.nrepl;
 
 import clojure.lang.DynamicClassLoader;
 import clojure.lang.RT;

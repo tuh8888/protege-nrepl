@@ -2,23 +2,22 @@
 <?eclipse version="3.0"?>
 
 <plugin>
-  
-  <!--extension id="toolmenu1" 
-             point="org.protege.editor.core.application.EditorKitMenuAction">
-    <name value="Example Menu 1"/>
-    <path value="org.protege.editor.owl.menu.tools/SlotG-A"/>
-    <toolTip value="This menu appears in the tools menu"/>
-    <class value="org.protege.example.menu.ToolsMenu1"/>
-    <editorKitId value="any"/>
-  </extension-->  
-  
-  <extension id="nrepl-menu" 
+
+    <extension id="menu.topNREPL"
                point="org.protege.editor.core.application.EditorKitMenuAction">
         <name value="NREPL"/>
-        <path value="org.protege.editor.owl.menu.tools/SlotG-A"/>
-        <toolTip value="This menu appears in the tools menu"/>
-        <class value="uk.org.russet.protege.NreplMenu"/>
+        <toolTip value=""/>
+        <path value="/SlotH-A"/>
         <editorKitId value="any"/>
-  </extension>
+    </extension>
+
+<!--    <extension id="menu.startNREPL"-->
+<!--               point="org.protege.editor.core.application.EditorKitMenuAction">-->
+<!--        <name value="Start"/>-->
+<!--        <toolTip value="Start an NREPL"/>-->
+<!--        <class value="ucdenver.ccp.protege.nrepl.NreplMenu"/>-->
+<!--        <path value="ucdenver.ccp.protege.menu.topNREPL/SlotCR-A"/>-->
+<!--        <editorKitId value="OWLEditorKit"/>-->
+<!--    </extension>-->
 
 </plugin>

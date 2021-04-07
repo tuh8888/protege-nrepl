@@ -4,8 +4,14 @@
 # cd ~/src/knowledge/protege-nrepl/nrepl-clojure
 # lein pom
 # lein install
-cd nrepl-plugin/
-mvn -DskipTests=true install
-cp target/uk.org.russet.protege.nrepl-0.1.0-SNAPSHOT.jar ~/Protege/plugins/
+cd nrepl-clojure
+lein uberjar
+mvn install:install-file -Dfile=target/nrepl-clojure-0.2.0-SNAPSHOT-standalone.jar -DgroupId=ucdenver.ccp -DartifactId=nrepl-clojure -Dversion=0.2.0-SNAPSHOT-standalone -Dpackaging=jar
 
-echo [COMPLETE] Dumped to ~/Protege
+#cd ../nrepl-plugin/
+#mvn -DskipTests=true install
+#cp target/protege.nrepl*.jar /opt/protege/plugins/
+#
+#cd /opt/protege
+#
+#sh run.sh

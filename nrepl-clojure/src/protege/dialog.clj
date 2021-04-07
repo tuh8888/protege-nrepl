@@ -1,9 +1,9 @@
 (ns protege.dialog
-  (:require [protege nrepl model])
+  (:require [protege.model :as protege]
+            [protege.nrepl :as protege-nrepl])
   (:import [java.awt BorderLayout Color]
-           [java.awt.event ActionListener]
-           [javax.swing BoxLayout JButton JLabel JPanel
-            JTextField]))
+           java.awt.event.ActionListener
+           [javax.swing BoxLayout JButton JLabel JPanel JTextField]))
 
 (def last-port (ref 7827))
 ;; map between model manager and port
@@ -16,15 +16,15 @@
 
 (defn start-server-action [editorkit connect disconnect status event]
   (dosync
-   (let [s (protege.nrepl/start-server
-            editorkit
-            @last-port)]
-     (alter servers merge {editorkit s})
-     (.setEnabled disconnect true)
-     (.setEnabled connect false)
-     (.setText status
-                (str "Connected on port: " @last-port) )
-     (alter last-port inc))))
+    (let [s (protege-nrepl/start-server
+              editorkit
+              @last-port)]
+      (alter servers merge {editorkit s})
+      (.setEnabled disconnect true)
+      (.setEnabled connect false)
+      (.setText status
+        (str "Connected on port: " @last-port) )
+      (alter last-port inc))))
 
 (defn stop-server-action [editorkit connect disconnect status event]
   (dosync
@@ -36,35 +36,35 @@
      (protege.nrepl/stop-server editorkit s))))
 
 (defn new-dialog-panel [editorkit]
-  (let [pn (JPanel.)
+  (let [pn         (JPanel.)
         ;; this one takes so a text box with next available port
         ;; and a status bar saying what, er, the status is
-        middle (JPanel.)
+        middle     (JPanel.)
         ;; takes a set of buttons, "Connect", "Disconnect", "Close"
         ;; greyed as appopriate
-        south (JPanel.)
-        button (JPanel.)
+        south      (JPanel.)
+        button     (JPanel.)
         port-label (JLabel. "Port")
-        port (JTextField. (str @last-port) 20)
-        status (JLabel. "Disconnected")
-        connect (JButton. "Connect")
+        port       (JTextField. (str @last-port) 20)
+        status     (JLabel. "Disconnected")
+        connect    (JButton. "Connect")
         disconnect (JButton. "Disconnect")
         connect-fn
         (partial start-server-action
-                 editorkit
-                 connect disconnect
-                 status)]
+          editorkit
+          connect disconnect
+          status)]
     (.addActionListener connect
-                        (action-listener connect-fn))
+      (action-listener connect-fn))
     (doto disconnect
       (.setEnabled false)
       (.addActionListener
-       (action-listener
-        (partial stop-server-action
-                 editorkit connect disconnect
-                 status))))
+        (action-listener
+          (partial stop-server-action
+            editorkit connect disconnect
+            status))))
 
-    (when @protege.model/auto-connect-on-default
+    (when @protege/auto-connect-on-default
       (connect-fn nil))
 
     (doto pn

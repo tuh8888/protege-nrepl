@@ -1,10 +1,10 @@
 (ns protege.nrepl
-  (:require [clojure.tools.nrepl.server]
-            [clojure.java.io]
-            [protege.model]))
+  (:require [nrepl.server :as nrepl]
+            [clojure.java.io :as io]
+            [protege.model :as protege]))
 
 
-(def nrepl-handler (ref clojure.tools.nrepl.server/default-handler))
+#_(def nrepl-handler (ref nrepl-server/default-handler))
 
 ;; borrowed from lein
 (defn getenv
@@ -38,11 +38,10 @@
 (defn add-hook
   "Add func to hook."
   [hook func]
-  (do
-    (when-not
-        (some #{func} @hook)
-      (swap! hook conj func))
-    @hook))
+  (when-not
+      (some #{func} @hook)
+    (swap! hook conj func))
+  @hook)
 
 (defn remove-hook
   "Remove func from hook."
@@ -72,18 +71,15 @@ that they were added."
 
 (defn start-server
   ([editorkit port]
-     (binding [protege.model/*owl-editor-kit* editorkit
-               protege.model/*owl-work-space*
-               (.getOWLWorkspace editorkit)
-               protege.model/*owl-model-manager*
-               (.getOWLModelManager editorkit)]
-       (run-hook start-server-hook)
-       (let [server
-             (clojure.tools.nrepl.server/start-server
-              :port port
-              :handler @nrepl-handler)]
-         (swap! servers assoc editorkit server)))))
+   (binding [protege.model/*owl-editor-kit*    nil #_editorkit
+             protege.model/*owl-work-space*    nil #_ (.getOWLWorkspace editorkit)
+             protege.model/*owl-model-manager* nil #_ (.getOWLModelManager editorkit)]
+     (run-hook start-server-hook)
+     (let [server
+           (nrepl/start-server :port port
+             #_#_:handler @nrepl-handler)]
+       (swap! servers assoc editorkit server)))))
 
 (defn stop-server [editorkit server]
   (swap! servers dissoc editorkit)
-  (clojure.tools.nrepl.server/stop-server server))
+  (nrepl/stop-server server))
