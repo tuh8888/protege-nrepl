@@ -36,53 +36,51 @@
       (protege.nrepl/stop-server editorkit s))))
 
 (defn new-dialog-panel [editorkit]
-  (let [pn         (JPanel.)
+  (let [pn             (JPanel.)
         ;; this one takes so a text box with next available port
         ;; and a status bar saying what, er, the status is
-        middle     (JPanel.)
+        middle-panel   (JPanel.)
         ;; takes a set of buttons, "Connect", "Disconnect", "Close"
-        ;; greyed as appopriate
-        south      (JPanel.)
-        button     (JPanel.)
-        port-label (JLabel. "Port")
-        port       (JTextField. (str @last-port) 20)
-        status     (JLabel. "Disconnected")
-        connect    (JButton. "Connect")
-        disconnect (JButton. "Disconnect")
-        connect-fn
-        (partial start-server-action
-          editorkit
-          connect disconnect
-          status)]
-    (.addActionListener connect
+        ;; activated as appropriate.
+        south-panel    (JPanel.)
+        button-panel   (JPanel.)
+        port-label     (JLabel. "Port")
+        port-field     (JTextField. (str @last-port) 20)
+        status-label   (JLabel. "Disconnected")
+        connect-btn    (JButton. "Connect")
+        disconnect-btn (JButton. "Disconnect")
+        connect-fn     (partial start-server-action
+                         editorkit
+                         connect-btn disconnect-btn
+                         status-label)]
+    (.addActionListener connect-btn
       (action-listener connect-fn))
-    (doto disconnect
+    (doto disconnect-btn
       (.setEnabled false)
-      (.addActionListener
-        (action-listener
-          (partial stop-server-action
-            editorkit connect disconnect
-            status))))
+      (.addActionListener (action-listener
+                            (partial stop-server-action
+                              editorkit connect-btn disconnect-btn
+                              status-label))))
 
     (when @protege/auto-connect-on-default
       (connect-fn nil))
 
     (doto pn
       (.setLayout (BorderLayout.))
-      (.add middle BorderLayout/CENTER)
-      (.add south BorderLayout/SOUTH))
-    (doto south
+      (.add middle-panel BorderLayout/CENTER)
+      (.add south-panel BorderLayout/SOUTH))
+    (doto south-panel
       (.setLayout (BorderLayout.))
-      (.add button BorderLayout/NORTH)
-      (.add status BorderLayout/SOUTH))
-    (doto button
-      (.setLayout (BoxLayout. button BoxLayout/X_AXIS))
-      (.add connect)
-      (.add disconnect))
-    (doto middle
+      (.add button-panel BorderLayout/NORTH)
+      (.add status-label BorderLayout/SOUTH))
+    (doto button-panel
+      (.setLayout (BoxLayout. button-panel BoxLayout/X_AXIS))
+      (.add connect-btn)
+      (.add disconnect-btn))
+    (doto middle-panel
       (.setLayout (BorderLayout.))
       (.add port-label BorderLayout/WEST)
-      (.add port BorderLayout/CENTER))
+      (.add port-field BorderLayout/CENTER))
     pn))
 
 (defn new-dialog [manager]
