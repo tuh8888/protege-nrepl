@@ -15,21 +15,18 @@
 ;; You should have received a copy of the GNU Lesser General Public License
 ;; along with this program. If not, see http://www.gnu.org/licenses/.
 
-(ns protege.model)
+(ns protege-nrepl.protege-interop)
 
 (def ^{:dynamic true
-       :doc     "The OWLModelManager for the Protege Instance from which the REPL
-is launched."}
+       :doc     "The OWLModelManager for the Protege Instance from which the REPL is launched."}
   *owl-model-manager* nil)
 
 (def ^{:dynamic true
-       :doc     "The OWLEditorKit for the Protege Instance from which the REPL is
-launched."}
+       :doc     "The OWLEditorKit for the Protege Instance from which the REPL is launched."}
   *owl-editor-kit* nil)
 
 (def ^{:dynamic true
-       :doc     "The OWLWorkspace for the Protege Instance from which the REPL is
-launched."}
+       :doc     "The OWLWorkspace for the Protege Instance from which the REPL is launched."}
   *owl-work-space* nil)
 
 (def auto-connect-on-default (ref false))

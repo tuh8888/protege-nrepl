@@ -15,7 +15,7 @@
                point="org.protege.editor.core.application.EditorKitMenuAction">
         <name value="Start"/>
         <toolTip value="Start an nREPL server"/>
-        <class value="ucdenver.ccp.protege.nrepl.NreplMenu"/>
+        <class value="ucdenver.ccp.protege.nrepl.NreplPlugin"/>
         <path value="protege-nrepl-plugin.menu.topNrepl/SlotCR-A"/>
         <editorKitId value="OWLEditorKit"/>
     </extension>

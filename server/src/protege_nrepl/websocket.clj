@@ -1,13 +1,11 @@
-(ns protege.websocket
-  (:require
-   [compojure.core :as compojure :refer [GET]]
-   [ring.middleware.params :as params]
-   [compojure.route :as route]
-   [aleph.http :as http]
-   [manifold.stream :as s]
-   [manifold.deferred :as d]
-   [manifold.bus :as bus]))
-
+(ns protege-nrepl.websocket
+  (:require [compojure.core :as compojure :refer [GET]]
+            [ring.middleware.params :as params]
+            [compojure.route :as route]
+            [aleph.http :as http]
+            [manifold.stream :as s]
+            [manifold.deferred :as d]
+            [manifold.bus :as bus]))
 
 (def non-websocket-request
   {:status  400

@@ -1,8 +1,8 @@
-(ns protege.dialog
+(ns protege-nrepl.dialog
   (:require [aleph.http :as http]
-            [protege.model :as protege]
-            [protege.nrepl :as protege-nrepl]
-            [protege.websocket :as websocket])
+            [protege-nrepl.protege-interop :as protege]
+            [protege-nrepl.core :as server]
+            [protege-nrepl.websocket :as websocket])
   (:import java.awt.BorderLayout
            java.awt.event.ActionListener
            [org.semanticweb.owlapi.model OWLOntologyChangeListener]
@@ -16,7 +16,7 @@
   (try
     (dosync
       (let [port (Integer/parseInt (.getText port-field))
-            s    (protege-nrepl/start-server
+            s    (server/start-server
                    editorkit port)]
         (alter servers merge {editorkit s})
         (.setEnabled disconnect-btn true)
@@ -35,7 +35,7 @@
       (.setEnabled connect true)
       (.setEnabled disconnect false)
       (.setText status "Disconnected")
-      (protege.nrepl/stop-server editorkit s))))
+      (server/stop-server editorkit s))))
 
 (defn new-dialog-panel [editorkit]
   (let [pn             (JPanel.)
@@ -104,11 +104,11 @@
   (reset! server (http/start-server websocket/handler {:port 10002}))
 
 
-  (-> protege.model/*owl-model-manager*
+  (-> protege/*owl-model-manager*
     bean
     keys)
   (def owl-changes (atom []))
-  (.addOntologyChangeListener protege.model/*owl-model-manager*
+  (.addOntologyChangeListener protege/*owl-model-manager*
     (proxy [OWLOntologyChangeListener] []
       (ontologiesChanged [changes]
         (println "bye")

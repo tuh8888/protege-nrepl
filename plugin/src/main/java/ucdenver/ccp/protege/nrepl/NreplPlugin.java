@@ -28,7 +28,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 
-public class NreplMenu extends ProtegeOWLAction {
+public class NreplPlugin extends ProtegeOWLAction {
     private static final long serialVersionUID = -2896209622461162777L;
     private static Object lock = new Object();
     private static boolean clojureInit = false;
@@ -38,15 +38,11 @@ public class NreplMenu extends ProtegeOWLAction {
     public void initialise() throws Exception {
     }
 
-
     public void dispose() throws Exception {
     }
 
-
     public static void main(String[] args) {
     }
-
-
 
     public void actionPerformed(ActionEvent event) {
         Thread.currentThread().
@@ -65,10 +61,9 @@ public class NreplMenu extends ProtegeOWLAction {
         final Runnable after = new Runnable(){
             public void run(){
                 Thread.currentThread().setContextClassLoader(cl);
-                Var newDialog = RT.var("protege.dialog", "new-dialog-panel");
+                Var newDialog = RT.var("protege-nrepl.dialog", "new-dialog-panel");
                 cp.removeAll();
-                JPanel dialog = (JPanel)newDialog.
-                        invoke(getOWLEditorKit());
+                JPanel dialog = (JPanel)newDialog. invoke(getOWLEditorKit());
 
                 cp.add(dialog);
                 frame.pack();
@@ -85,10 +80,10 @@ public class NreplMenu extends ProtegeOWLAction {
                 try{
                     if(!clojureInit){
                         synchronized(lock){
-                            RT.loadResourceScript("protege/dialog.clj");
-                            RT.loadResourceScript("protege/nrepl.clj");
+                            RT.loadResourceScript("protege_nrepl/dialog.clj");
+                            RT.loadResourceScript("protege_nrepl/core.clj");
                             initLabel.setText("Reading User Init");
-                            Var init = RT.var("protege.nrepl","init");
+                            Var init = RT.var("protege-nrepl.core","init");
                             init.invoke();
                             clojureInit=true;
                         }
