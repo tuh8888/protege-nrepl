@@ -13,3 +13,4 @@
 /nrepl-clojure/pom.xml.asc
 /.idea/
 /nrepl-plugin/protege-nrepl.iml
+/nrepl-clojure/.clj-kondo/

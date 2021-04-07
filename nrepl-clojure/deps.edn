@@ -3,9 +3,8 @@
            edu.stanford.protege/protege-editor-core {:mvn/version "5.5.0"}
            clj-commons/pomegranate                  {:mvn/version "1.2.0"}
            compojure/compojure                      {:mvn/version "1.6.2"}
-           aleph/aleph                              {:mvn/version "0.4.0-beta3"}
-           org.clojure/core.async                   {:mvn/version "1.3.610"}
-           cider/cider-nrepl                        {:mvn/version "0.25.9"}}
+           aleph/aleph                              {:mvn/version "0.4.1"}
+           org.clojure/core.async                   {:mvn/version "1.3.610"}}
  :aliases {
            ;; build an uberjar (application) with AOT compilation by default:
            :uberjar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.0.211"}}

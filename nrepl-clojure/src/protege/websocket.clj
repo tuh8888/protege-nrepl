@@ -4,11 +4,9 @@
    [ring.middleware.params :as params]
    [compojure.route :as route]
    [aleph.http :as http]
-   [byte-streams :as bs]
    [manifold.stream :as s]
    [manifold.deferred :as d]
-   [manifold.bus :as bus]
-   [clojure.core.async :as a]))
+   [manifold.bus :as bus]))
 
 
 (def non-websocket-request

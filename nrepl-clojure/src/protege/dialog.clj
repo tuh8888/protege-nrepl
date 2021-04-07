@@ -2,8 +2,7 @@
   (:require [aleph.http :as http]
             [protege.model :as protege]
             [protege.nrepl :as protege-nrepl]
-            [protege.websocket :as websocket]
-            [clojure.pprint :as pp])
+            [protege.websocket :as websocket])
   (:import java.awt.BorderLayout
            java.awt.event.ActionListener
            [javax.swing BoxLayout JButton JLabel JPanel JTextField]))

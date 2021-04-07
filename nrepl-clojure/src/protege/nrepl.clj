@@ -1,7 +1,5 @@
 (ns protege.nrepl
-  (:require [cider.nrepl :refer [cider-nrepl-handler]]
-            [clojure.java.io :as io]
-            [clojure.pprint :as pp]
+  (:require [clojure.java.io :as io]
             [nrepl.server :as nrepl]
             [protege.model :as protege]))
 
@@ -39,8 +37,7 @@
              protege.model/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]
      (let [server
            (nrepl/start-server
-             :port port
-             #_#_:handler cider-nrepl-handler)]
+             :port port)]
        (swap! servers assoc editorkit server)))))
 
 (defn stop-server [editorkit server]
