@@ -7,21 +7,25 @@
            java.awt.event.ActionListener
            [javax.swing BoxLayout JButton JLabel JPanel JTextField]))
 
-(def last-port (ref 7827))
+(def last-port (ref 7830))
 ;; map between model manager and port
 (def servers (ref {}))
 
-(defn start-server-action [editorkit connect disconnect port-field status]
-  (dosync
-    (let [port (Integer/parseInt (.getText port-field))
-          s    (protege-nrepl/start-server
-                 editorkit port)]
-      (alter servers merge {editorkit s})
-      (.setEnabled disconnect true)
-      (.setEnabled connect false)
-      (.setText status
-        (str "Connected on port: " port))
-      (ref-set last-port port))))
+(defn start-server-action [editorkit connect-btn disconnect-btn port-field status-label warning-label]
+  (try
+    (dosync
+      (let [port (Integer/parseInt (.getText port-field))
+            s    (protege-nrepl/start-server
+                   editorkit port)]
+        (alter servers merge {editorkit s})
+        (.setEnabled disconnect-btn true)
+        (.setEnabled connect-btn false)
+        (.setText status-label
+          (str "Connected on port: " port))
+        (.setText warning-label "OK")
+        (ref-set last-port port)))
+    (catch java.net.BindException e
+      (.setText warning-label (.getMessage e)))))
 
 (defn stop-server-action [editorkit connect disconnect status]
   (dosync
@@ -44,6 +48,7 @@
         port-label     (JLabel. "Port")
         port-field     (JTextField. (str @last-port) 20)
         status-label   (JLabel. "Disconnected")
+        warning-label  (JLabel. "OK")
         connect-btn    (JButton. "Connect")
         disconnect-btn (JButton. "Disconnect")]
     (doto connect-btn
@@ -52,7 +57,8 @@
                               (start-server-action
                                 editorkit
                                 connect-btn disconnect-btn
-                                port-field status-label)))))
+                                port-field status-label
+                                warning-label)))))
     (doto disconnect-btn
       (.setEnabled false)
       (.addActionListener (proxy [ActionListener] []
@@ -71,7 +77,10 @@
     (doto south-panel
       (.setLayout (BorderLayout.))
       (.add button-panel BorderLayout/NORTH)
-      (.add status-label BorderLayout/SOUTH))
+      (.add (doto (JPanel.)
+              (.setLayout (BorderLayout.))
+              (.add status-label BorderLayout/NORTH)
+              (.add warning-label BorderLayout/SOUTH))))
     (doto button-panel
       (.setLayout (BoxLayout. button-panel BoxLayout/X_AXIS))
       (.add connect-btn)
