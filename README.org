@@ -12,6 +12,8 @@ Both maven and clojure-cli are required to build the plugin. To build, simply
 
 This script uses helper scripts provided in the ./scripts/ directory. These uberjar the clojure-nrepl library, install it to the local maven repository, build the plugin, and copy it to protege's /plugins/ directory.
 
+Uberjarring [[file:nrepl-clojure/]] is performed using [[https://github.com/seancorfield/depstar][depstar]]. This gets all of the dependencies it needs into a single jar so they are available to OSGi.
+
 ** Usage
 
 Install the plugin as a normal Protege plugin. This adds a single top level menu item called NREPL, which can be used to launch a REPL for the current Protege workspace.
@@ -29,6 +31,10 @@ My `init.clj` is shown in full at https://github.com/phillord/tawny-protege/READ
     ;; initing the dialog takes ages -- so auto connect
     (dosync (ref-set protege.model/auto-connect-on-default true))
 
+** Notes
+   - I was not able to get Clojure > 1.7.0 to work due to [[https://github.com/cursive-ide/gradle-clojure/issues/8][this issue]].
+   - OSGi is incredibly finicky about its classpath. In the [[file:nrepl-plugin/pom.xml]], there are many excluded imports. It is not clear why these are needed. If a package doesn't seem to be working as expected, fiddling with these is a good bet.
+   - CIDER's [[https://github.com/clojure-emacs/cider-nrepl][cider-nrepl]] and [[https://github.com/clojure-emacs/refactor-nrepl][refactor-nrepl]] are unavailable due to the Clojure version restriction. They require Clojure >= 1.8.0.
 
 ** Mailing List
 
