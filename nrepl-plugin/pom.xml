@@ -37,30 +37,10 @@
             <version>5.5.0</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.9.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>2.9.8</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.9.8</version>
-        </dependency>
-        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.7.1</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>5.0.1</version>
         </dependency>
     </dependencies>
 
@@ -90,15 +70,16 @@
                         <Bundle-Vendor>UC Denver CCP</Bundle-Vendor>
                         <Import-Package>
                             !groovy.lang,
-                            !com.sun.java.swing.*, !com.sun.org.*, !sun.misc,
+                            !com.sun.java.swing.*, !com.sun.org.*,
                             !com.google.*,
+                            !javax.jms, !javax.mail*, !javax.servlet*,
                             !net.sf.ehcache, !net.spy.memcached,
+                            !org.apache.avalon.*,!org.apache.log, !org.apache.tomcat.*,
                             !org.checkerframework.checker.nullness.compatqual,
-                            !javax.jms,
-                            !javax.mail*,
+                            !org.codehaus.*,
+                            !org.eclipse.sisu,
                             !org.osgi.service.cm,
-                            !javax.servlet*,!junit.*,!org.junit*,!org.apache.*,
-                            !org.codehaus.*,!org.eclipse.sisu,!sun.reflect,
+                            !sun.misc,!sun.reflect,
 
                             !com.jcraft.jzlib, !com.ning.compress.*,
                             !com.oracle.svm.core.*,!io.netty.internal.tcnative,
@@ -106,23 +87,17 @@
                             !org.bouncycastle.*,!org.conscrypt*,!org.eclipse.jetty.*,
                             !org.jboss.marshalling,!reactor.blockhound*,!sun.security*,
                             !com.barchart.udt*,!com.sun.nio.sctp,!gnu.io,!javassist,
-                            clojure.*,
                             org.protege.editor.owl.*;version="5.0.0",
                             *
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Embed-Dependency>
-                            guice,
-<!--                            clojure, core.specs.alpha, spec.alpha,-->
-                            nrepl-clojure,
-                            jackson-databind, jackson-annotations, jackson-core
-                        </Embed-Dependency>
+                        <Embed-Dependency>nrepl-clojure</Embed-Dependency>
                         <Include-Resource>plugin.xml</Include-Resource>
                     </instructions>
                 </configuration>
             </plugin>
-         </plugins>
+        </plugins>
     </build>
 
 
