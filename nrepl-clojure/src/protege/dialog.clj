@@ -87,12 +87,12 @@
 
 (defn new-dialog [manager]
 
-  (pp/pprint "hello")
-  #_(reset! server (http/start-server websocket/handler {:port 10001}))
-  #_(doto (javax.swing.JFrame.)
-      (.. getContentPane (add (new-dialog-panel manager)))
-      (.pack)
-      (.setVisible true)))
+  #_(pp/pprint "hello")
+  (doto (javax.swing.JFrame.)
+    (.. getContentPane (add (new-dialog-panel manager)))
+    (.pack)
+    (.setVisible true)))
 
 (comment
-  (new-dialog nil))
+  (reset! server (http/start-server websocket/handler {:port 10002}))
+  (:activeOntologies (bean protege.model/*owl-model-manager*)))

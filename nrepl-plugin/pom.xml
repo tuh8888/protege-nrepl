@@ -190,6 +190,7 @@
                             !javax.portlet,!lzma.sdk*,!net.jpountz.*,
                             !org.bouncycastle.*,!org.conscrypt*,!org.eclipse.jetty.*,
                             !org.jboss.marshalling,!reactor.blockhound*,!sun.security*,
+                            !com.barchart.udt*,!com.sun.nio.sctp,!gnu.io,!javassist,
                             clojure.*,
 <!--                            com.fasterxml.jackson.*,-->
                             org.protege.editor.owl.*;version="5.0.0",

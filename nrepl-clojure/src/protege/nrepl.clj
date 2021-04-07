@@ -40,7 +40,7 @@
      (let [server
            (nrepl/start-server
              :port port
-             :handler cider-nrepl-handler)]
+             #_#_:handler cider-nrepl-handler)]
        (swap! servers assoc editorkit server)))))
 
 (defn stop-server [editorkit server]
