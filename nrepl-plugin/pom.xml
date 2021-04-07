@@ -87,7 +87,6 @@
                             !org.bouncycastle.*,!org.conscrypt*,!org.eclipse.jetty.*,
                             !org.jboss.marshalling,!reactor.blockhound*,!sun.security*,
                             !com.barchart.udt*,!com.sun.nio.sctp,!gnu.io,!javassist,
-                            org.protege.editor.owl.*;version="5.0.0",
                             *
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
