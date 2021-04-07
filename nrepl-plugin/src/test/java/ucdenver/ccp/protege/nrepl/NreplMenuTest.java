@@ -1,4 +1,4 @@
-package ucdenver.ccp.knowtator.protege;
+package ucdenver.ccp.protege.nrepl;
 
 import java.io.IOException;
 

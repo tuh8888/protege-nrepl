@@ -6,7 +6,7 @@ mvn install:install-file -Dfile=target/nrepl-clojure-0.2.0-SNAPSHOT-standalone.j
 
 cd ../nrepl-plugin/
 mvn -DskipTests=true install
-cp target/knowtator*.jar /opt/protege/plugins/
+cp target/protege-nrepl*.jar /opt/protege/plugins/
 
 cd /opt/protege
 

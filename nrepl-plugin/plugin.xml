@@ -5,7 +5,7 @@
 
     <extension id="menu.topNrepl"
                point="org.protege.editor.core.application.EditorKitMenuAction">
-        <name value="Knowtator"/>
+        <name value="nREPL"/>
         <toolTip value=""/>
         <path value="/SlotH-A"/>
         <editorKitId value="any"/>
@@ -15,8 +15,8 @@
                point="org.protege.editor.core.application.EditorKitMenuAction">
         <name value="Start"/>
         <toolTip value="Start an nREPL server"/>
-        <class value="ucdenver.ccp.knowtator.protege.NreplMenu"/>
-        <path value="knowtator.protege.menu.topNrepl/SlotCR-A"/>
+        <class value="ucdenver.ccp.protege.nrepl.NreplMenu"/>
+        <path value="protege-nrepl.menu.topNrepl/SlotCR-A"/>
         <editorKitId value="OWLEditorKit"/>
     </extension>
 

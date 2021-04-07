@@ -11,3 +11,5 @@
 /nrepl-plugin/src/.svn/entries
 /nrepl-clojure/.lein-failures
 /nrepl-clojure/pom.xml.asc
+/.idea/
+/nrepl-plugin/protege-nrepl.iml

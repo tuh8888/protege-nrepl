@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ucdenver.ccp</groupId>
-    <artifactId>knowtator.protege</artifactId>
+    <artifactId>protege-nrepl</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
@@ -87,7 +87,7 @@
                 <configuration>
                     <instructions>
 
-                        <Bundle-Name>Knowtator</Bundle-Name>
+                        <Bundle-Name>Protege nREPL</Bundle-Name>
                         <Bundle-Activator>org.protege.editor.owl.ProtegeOWL</Bundle-Activator>
                         <Bundle-ClassPath>.</Bundle-ClassPath>
                         <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
