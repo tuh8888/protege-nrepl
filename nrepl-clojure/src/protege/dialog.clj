@@ -5,6 +5,7 @@
             [protege.websocket :as websocket])
   (:import java.awt.BorderLayout
            java.awt.event.ActionListener
+           [org.semanticweb.owlapi.model OWLOntologyChangeListener]
            [javax.swing BoxLayout JButton JLabel JPanel JTextField]))
 
 (def last-port (ref 7830))
@@ -94,8 +95,6 @@
 (defonce server (atom nil))
 
 (defn new-dialog [manager]
-
-  #_(pp/pprint "hello")
   (doto (javax.swing.JFrame.)
     (.. getContentPane (add (new-dialog-panel manager)))
     (.pack)
@@ -103,4 +102,20 @@
 
 (comment
   (reset! server (http/start-server websocket/handler {:port 10002}))
-  (:activeOntologies (bean protege.model/*owl-model-manager*)))
+
+
+  (compile 'protege.OWLOntologyChangeListenerImpl.)
+  (-> protege.model/*owl-model-manager*
+    bean
+    keys)
+  (def owl-changes (atom []))
+  (.addOntologyChangeListener protege.model/*owl-model-manager*
+    (proxy [OWLOntologyChangeListener] []
+      (ontologiesChanged [changes]
+        (println "bye")
+        (reset! owl-changes (map bean changes)))))
+
+  (->> @owl-changes
+    first
+    vals
+    (map type)))

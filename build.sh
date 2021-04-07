@@ -4,7 +4,7 @@
 
 cd nrepl-plugin/
 mvn -DskipTests=true install
+cd ..
 ./scripts/build-plugin.sh
 
 protege
-
