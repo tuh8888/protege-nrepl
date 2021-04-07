@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ucdenver.ccp</groupId>
-    <artifactId>protege-nrepl-plugin</artifactId>
+    <artifactId>protege-nrepl</artifactId>
     <version>${env.RELEASE_VERSION}</version>
     <packaging>bundle</packaging>
 
