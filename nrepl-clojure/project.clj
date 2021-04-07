@@ -8,11 +8,14 @@
   :url "https://github.com/phillord/protege-nrepl"
   :dependencies [[org.clojure/clojure "1.10.3"]
                  [nrepl/nrepl "0.8.3"]
-                 #_[edu.stanford.protege/org.protege.editor.core.application
-                    "5.0.0-beta-16-SNAPSHOT"]
+                 [edu.stanford.protege/org.protege.editor.core.application
+                  "5.0.0-beta-16-SNAPSHOT"]
                  [edu.stanford.protege/protege-editor-core
                   "5.5.0"]
                  [clj-commons/pomegranate "1.2.0"]
+                 [compojure "1.6.2"]
+                 [aleph "0.4.7-alpha7"]
+                 [org.clojure/core.async "1.3.610"]
                  [cider/cider-nrepl "0.25.9"]]
   ;; this is a hack workaround to
   ;; https://github.com/technomancy/leiningen/issues/1569 which otherwise adds

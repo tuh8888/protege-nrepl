@@ -34,7 +34,6 @@
 
 (defn start-server
   ([editorkit port]
-   (pp/pprint "hello")
    (binding [protege.model/*owl-editor-kit*    editorkit
              protege.model/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
              protege.model/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]

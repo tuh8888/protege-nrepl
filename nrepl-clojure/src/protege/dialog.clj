@@ -1,6 +1,9 @@
 (ns protege.dialog
-  (:require [protege.model :as protege]
-            [protege.nrepl :as protege-nrepl])
+  (:require [aleph.http :as http]
+            [protege.model :as protege]
+            [protege.nrepl :as protege-nrepl]
+            [protege.websocket :as websocket]
+            [clojure.pprint :as pp])
   (:import java.awt.BorderLayout
            java.awt.event.ActionListener
            [javax.swing BoxLayout JButton JLabel JPanel JTextField]))
@@ -80,11 +83,16 @@
       (.add port-field BorderLayout/CENTER))
     pn))
 
+(defonce server (atom nil))
+
 (defn new-dialog [manager]
-  (doto (javax.swing.JFrame.)
-    (.. getContentPane (add (new-dialog-panel manager)))
-    (.pack)
-    (.setVisible true)))
+
+  (pp/pprint "hello")
+  #_(reset! server (http/start-server websocket/handler {:port 10001}))
+  #_(doto (javax.swing.JFrame.)
+      (.. getContentPane (add (new-dialog-panel manager)))
+      (.pack)
+      (.setVisible true)))
 
 (comment
   (new-dialog nil))

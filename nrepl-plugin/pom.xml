@@ -54,57 +54,103 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>RELEASE</version>
+            <version>5.7.1</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.clojure</groupId>
-            <artifactId>clojure</artifactId>
-            <version>1.10.3</version>
-        </dependency>
-        <dependency>
-            <groupId>org.clojure</groupId>
-            <artifactId>core.specs.alpha</artifactId>
-            <version>0.2.56</version>
-        </dependency>
-        <dependency>
-            <groupId>org.clojure</groupId>
-            <artifactId>spec.alpha</artifactId>
-            <version>0.2.194</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.clojure</groupId>-->
+<!--            <artifactId>clojure</artifactId>-->
+<!--            <version>1.10.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.clojure</groupId>-->
+<!--            <artifactId>core.specs.alpha</artifactId>-->
+<!--            <version>0.2.56</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.clojure</groupId>-->
+<!--            <artifactId>spec.alpha</artifactId>-->
+<!--            <version>0.2.194</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>5.0.1</version>
         </dependency>
-        <dependency>
-            <groupId>nrepl</groupId>
-            <artifactId>nrepl</artifactId>
-            <version>0.8.3</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>nrepl</groupId>-->
+<!--            <artifactId>nrepl</artifactId>-->
+<!--            <version>0.8.3</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>cider</groupId>-->
+<!--            <artifactId>cider-nrepl</artifactId>-->
+<!--            <version>0.25.9</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>aleph</groupId>-->
+<!--            <artifactId>aleph</artifactId>-->
+<!--            <version>0.4.7-alpha7</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>compojure</groupId>-->
+<!--            <artifactId>compojure</artifactId>-->
+<!--            <version>1.6.2</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>manifold</groupId>-->
+<!--            <artifactId>manifold</artifactId>-->
+<!--            <version>0.1.8</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.clojure</groupId>-->
+<!--            <artifactId>tools.logging</artifactId>-->
+<!--            <version>1.1.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <id>compile-with-lein</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>lein</executable>
-                    <commandlineArgs>install</commandlineArgs>
-                    <workingDirectory>../nrepl-clojure</workingDirectory>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <artifactId>exec-maven-plugin</artifactId>-->
+<!--                <version>1.1</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>compile-with-lein</id>-->
+<!--                        <phase>initialize</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>exec</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <executable>lein</executable>-->
+<!--                    <commandlineArgs>install</commandlineArgs>-->
+<!--                    <workingDirectory>../nrepl-clojure</workingDirectory>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>com.theoryinpractise</groupId>-->
+<!--                <artifactId>clojure-maven-plugin</artifactId>-->
+<!--                <version>1.8.4</version>-->
+<!--                <extensions>true</extensions>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>compile</id>-->
+<!--                        <phase>compile</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>compile</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <sourceDirectories>-->
+<!--                        <sourceDirectory>../nrepl-clojure/src</sourceDirectory>-->
+<!--                    </sourceDirectories>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -138,16 +184,22 @@
                             !org.osgi.service.cm,
                             !javax.servlet*,!junit.*,!org.junit*,!org.apache.*,
                             !org.codehaus.*,!org.eclipse.sisu,!sun.reflect,
-                            com.fasterxml.jackson.*,
+
+                            !com.jcraft.jzlib, !com.ning.compress.*,
+                            !com.oracle.svm.core.*,!io.netty.internal.tcnative,
+                            !javax.portlet,!lzma.sdk*,!net.jpountz.*,
+                            !org.bouncycastle.*,!org.conscrypt*,!org.eclipse.jetty.*,
+                            !org.jboss.marshalling,!reactor.blockhound*,!sun.security*,
+                            clojure.*,
+<!--                            com.fasterxml.jackson.*,-->
                             org.protege.editor.owl.*;version="5.0.0",
                             *
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Embed-Dependency>
-                            nrepl,
                             guice,
-                            clojure, core.specs.alpha, spec.alpha,
+<!--                            clojure, core.specs.alpha, spec.alpha,-->
                             nrepl-clojure,
                             jackson-databind, jackson-annotations, jackson-core
                         </Embed-Dependency>
