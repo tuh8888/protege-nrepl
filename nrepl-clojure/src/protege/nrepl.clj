@@ -1,8 +1,8 @@
 (ns protege.nrepl
-  (:require [nrepl.server :as nrepl]
+  (:require [cider.nrepl :refer [cider-nrepl-handler]]
             [clojure.java.io :as io]
+            [nrepl.server :as nrepl]
             [protege.model :as protege]))
-
 
 #_(def nrepl-handler (ref nrepl-server/default-handler))
 
@@ -17,7 +17,7 @@
   []
   (let [protege-nrepl-home (getenv "PROTEGE_NREPL_HOME")
         protege-nrepl-home (or (and protege-nrepl-home (clojure.java.io/file protege-nrepl-home))
-                      (clojure.java.io/file (System/getProperty "user.home") ".protege-nrepl"))]
+                             (clojure.java.io/file (System/getProperty "user.home") ".protege-nrepl"))]
     (.getAbsolutePath (doto protege-nrepl-home .mkdirs))))
 
 (def init
@@ -47,8 +47,8 @@
   "Remove func from hook."
   [hook func]
   (swap! hook
-         (partial
-          remove #{func})))
+    (partial
+      remove #{func})))
 
 (defn clear-hook
   "Empty the hook."
@@ -57,27 +57,26 @@
 
 (defn run-hook
   "Run the hook with optional arguments. Hook functions are run in the order
-that they were added."
+  that they were added."
   ([hook]
-     (doseq [func @hook] (func)))
+   (doseq [func @hook] (func)))
   ([hook & rest]
-     (doseq [func @hook] (apply func rest))))
-
+   (doseq [func @hook] (apply func rest))))
 
 (def start-server-hook (make-hook))
 
 (def servers (atom {}))
 
-
 (defn start-server
   ([editorkit port]
-   (binding [protege.model/*owl-editor-kit*    nil #_editorkit
-             protege.model/*owl-work-space*    nil #_ (.getOWLWorkspace editorkit)
-             protege.model/*owl-model-manager* nil #_ (.getOWLModelManager editorkit)]
+   (binding [protege.model/*owl-editor-kit*    editorkit
+             protege.model/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
+             protege.model/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]
      (run-hook start-server-hook)
      (let [server
-           (nrepl/start-server :port port
-             #_#_:handler @nrepl-handler)]
+           (nrepl/start-server
+             :port port
+             :handler cider-nrepl-handler)]
        (swap! servers assoc editorkit server)))))
 
 (defn stop-server [editorkit server]

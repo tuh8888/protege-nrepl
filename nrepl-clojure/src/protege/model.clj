@@ -18,17 +18,17 @@
 (ns protege.model)
 
 (def ^{:dynamic true
-       :doc "The OWLModelManager for the Protege Instance from which the REPL
+       :doc     "The OWLModelManager for the Protege Instance from which the REPL
 is launched."}
   *owl-model-manager* nil)
 
 (def ^{:dynamic true
-       :doc "The OWLEditorKit for the Protege Instance from which the REPL is
+       :doc     "The OWLEditorKit for the Protege Instance from which the REPL is
 launched."}
   *owl-editor-kit* nil)
 
 (def ^{:dynamic true
-       :doc "The OWLWorkspace for the Protege Instance from which the REPL is
+       :doc     "The OWLWorkspace for the Protege Instance from which the REPL is
 launched."}
   *owl-work-space* nil)
 
@@ -36,17 +36,16 @@ launched."}
 
 (defn active-ontology
   ([]
-     (.getActiveOntology *owl-model-manager*))
+   (.getActiveOntology *owl-model-manager*))
   ([o]
-     (.setActiveOntology *owl-model-manager* o)))
-
+   (.setActiveOntology *owl-model-manager* o)))
 
 (defn selected-object
   ([workspace]
-     (-> workspace
-         .getOWLSelectionModel
-         .getSelectedObject))
+   (-> workspace
+     .getOWLSelectionModel
+     .getSelectedObject))
   ([workspace entity]
-     (-> workspace
-         .getOWLSelectionModel
-         (.setSelectedObject entity))))
+   (-> workspace
+     .getOWLSelectionModel
+     (.setSelectedObject entity))))

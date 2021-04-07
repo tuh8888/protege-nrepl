@@ -1,7 +1,7 @@
 (ns protege.dialog
   (:require [protege.model :as protege]
             [protege.nrepl :as protege-nrepl])
-  (:import [java.awt BorderLayout Color]
+  (:import java.awt.BorderLayout
            java.awt.event.ActionListener
            [javax.swing BoxLayout JButton JLabel JPanel JTextField]))
 
@@ -23,17 +23,17 @@
       (.setEnabled disconnect true)
       (.setEnabled connect false)
       (.setText status
-        (str "Connected on port: " @last-port) )
+        (str "Connected on port: " @last-port))
       (alter last-port inc))))
 
 (defn stop-server-action [editorkit connect disconnect status event]
   (dosync
-   (let [s (get @servers editorkit)]
-     (alter servers dissoc editorkit)
-     (.setEnabled connect true)
-     (.setEnabled disconnect false)
-     (.setText status "Disconnected")
-     (protege.nrepl/stop-server editorkit s))))
+    (let [s (get @servers editorkit)]
+      (alter servers dissoc editorkit)
+      (.setEnabled connect true)
+      (.setEnabled disconnect false)
+      (.setText status "Disconnected")
+      (protege.nrepl/stop-server editorkit s))))
 
 (defn new-dialog-panel [editorkit]
   (let [pn         (JPanel.)
@@ -85,9 +85,7 @@
       (.add port BorderLayout/CENTER))
     pn))
 
-
-
-(defn new-dialog[manager]
+(defn new-dialog [manager]
   (let [fm (javax.swing.JFrame.)
         cp (.getContentPane fm)]
     (.add cp (new-dialog-panel manager))
