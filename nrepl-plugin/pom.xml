@@ -1,52 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>7</version>
-    </parent>
-
-
     <groupId>ucdenver.ccp</groupId>
-    <artifactId>protege.nrepl</artifactId>
-    <version>0.2.0-SNAPSHOT</version>
-    <name>protege-nrepl</name>
-    <description>Provide an NREPL client to use Clojure inside Protege</description>
-
+    <artifactId>knowtator.protege</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>ucdenver.ccp</groupId>
             <artifactId>nrepl-clojure</artifactId>
-            <version>0.2.0-SNAPSHOT</version>
+            <version>0.2.0-SNAPSHOT-standalone</version>
         </dependency>
-
-
-        <!-- protege dependencies -->
         <dependency>
             <groupId>edu.stanford.protege</groupId>
             <artifactId>protege-editor-owl</artifactId>
             <version>5.5.0</version>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-databind</artifactId>-->
-<!--            <version>2.9.8</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-annotations</artifactId>-->
-<!--            <version>2.9.8</version>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>com.fasterxml.jackson.core</groupId>-->
-<!--            <artifactId>jackson-core</artifactId>-->
-<!--            <version>2.9.8</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>2.9.8</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.9.8</version>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -54,42 +46,29 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.errorprone</groupId>
-            <artifactId>error_prone_annotations</artifactId>
-            <version>2.6.0</version>
+            <groupId>org.clojure</groupId>
+            <artifactId>clojure</artifactId>
+            <version>1.10.3</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/com.google.inject/guice -->
+        <dependency>
+            <groupId>org.clojure</groupId>
+            <artifactId>core.specs.alpha</artifactId>
+            <version>0.2.56</version>
+        </dependency>
+        <dependency>
+            <groupId>org.clojure</groupId>
+            <artifactId>spec.alpha</artifactId>
+            <version>0.2.194</version>
+        </dependency>
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>5.0.1</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <plugins>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <id>compile-with-lein</id>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <executable>lein</executable>
-                    <commandlineArgs>install</commandlineArgs>
-                    <workingDirectory>../nrepl-clojure</workingDirectory>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -99,6 +78,7 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -107,49 +87,40 @@
                 <configuration>
                     <instructions>
 
-                        <Bundle-Name>Protege NREPL</Bundle-Name>
+                        <Bundle-Name>Knowtator</Bundle-Name>
                         <Bundle-Activator>org.protege.editor.owl.ProtegeOWL</Bundle-Activator>
-                        <Bundle-Description>Integrate with Protege through a Clojure Process</Bundle-Description>
-                        <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
                         <Bundle-ClassPath>.</Bundle-ClassPath>
+                        <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
                         <Bundle-Vendor>UC Denver CCP</Bundle-Vendor>
-                        <!-- We exclude a bunch of things here which otherwise get
-                        into the import list and are not provided from anywhere. How
-                        do they get there? No idea!
-
-                        We also have to include javax.swing.text.html.parser because
-                        it's used by cider-nrepl which breaks otherwise
-                        -->
                         <Import-Package>
+                            !groovy.lang,
+                            !com.sun.java.swing.*, !com.sun.org.*, !sun.misc,
+                            !com.google.*,
+                            !net.sf.ehcache, !net.spy.memcached,
+                            !org.checkerframework.checker.nullness.compatqual,
+                            !javax.jms,
+                            !javax.mail*,
+                            !org.osgi.service.cm,
                             !javax.servlet*,!junit.*,!org.junit*,!org.apache.*,
-                            !org.testng.*,!sun.misc.*,!com.sun.*,!javax.*,!org.codehaus.*,
-                            !org.eclipse.*,!org.osgi.*,!sun.reflect,
+                            !org.codehaus.*,!org.eclipse.sisu,!sun.reflect,
                             com.fasterxml.jackson.*,
                             org.protege.editor.owl.*;version="5.0.0",
                             *
-                            <!--cider-nrepl-->
-                            <!-- javax.swing.text.html.parser, -->
-                            <!--tawny-->
-                            <!-- org.w3c.dom, -->
                         </Import-Package>
                         <DynamicImport-Package>*</DynamicImport-Package>
-                        <Include-Resource>plugin.xml,{maven-resources}</Include-Resource>
                         <Embed-Transitive>true</Embed-Transitive>
-                        <Embed-Dependency>error_prone_annotations, guice, jackson-databind, jackson-annotations, jackson-core;*;scope=compile|runtime</Embed-Dependency>
-                        <Export-Package>
-                            groovy.lang,
-                            net.sf.ehcache,
-                            net.spy.memcached,
-                            org.checkerframework.checker.nullness.compatqual
-                        </Export-Package>
-                        <!--Require-Bundle>
-                          org.protege.editor.core.application,
-                          org.protege.editor.owl,
-                          org.semanticweb.owl.owlapi,
-                        </Require-Bundle-->
+                        <Embed-Dependency>
+                            guice,
+                            clojure, core.specs.alpha, spec.alpha,
+                            nrepl-clojure,
+                            jackson-databind, jackson-annotations, jackson-core
+                        </Embed-Dependency>
+                        <Include-Resource>plugin.xml</Include-Resource>
                     </instructions>
                 </configuration>
             </plugin>
-        </plugins>
+         </plugins>
     </build>
+
+
 </project>

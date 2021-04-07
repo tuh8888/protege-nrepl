@@ -3,21 +3,21 @@
 
 <plugin>
 
-    <extension id="menu.topNREPL"
+    <extension id="menu.topNrepl"
                point="org.protege.editor.core.application.EditorKitMenuAction">
-        <name value="NREPL"/>
+        <name value="Knowtator"/>
         <toolTip value=""/>
         <path value="/SlotH-A"/>
         <editorKitId value="any"/>
     </extension>
 
-<!--    <extension id="menu.startNREPL"-->
-<!--               point="org.protege.editor.core.application.EditorKitMenuAction">-->
-<!--        <name value="Start"/>-->
-<!--        <toolTip value="Start an NREPL"/>-->
-<!--        <class value="ucdenver.ccp.protege.nrepl.NreplMenu"/>-->
-<!--        <path value="ucdenver.ccp.protege.menu.topNREPL/SlotCR-A"/>-->
-<!--        <editorKitId value="OWLEditorKit"/>-->
-<!--    </extension>-->
+    <extension id="menu.startNrepl"
+               point="org.protege.editor.core.application.EditorKitMenuAction">
+        <name value="Start"/>
+        <toolTip value="Start an nREPL server"/>
+        <class value="ucdenver.ccp.knowtator.protege.NreplMenu"/>
+        <path value="knowtator.protege.menu.topNrepl/SlotCR-A"/>
+        <editorKitId value="OWLEditorKit"/>
+    </extension>
 
 </plugin>

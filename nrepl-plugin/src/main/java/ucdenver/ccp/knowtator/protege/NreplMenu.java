@@ -16,23 +16,16 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see http://www.gnu.org/licenses/.
  */
-package ucdenver.ccp.protege.nrepl;
+package ucdenver.ccp.knowtator.protege;
 
 import clojure.lang.DynamicClassLoader;
 import clojure.lang.RT;
 import clojure.lang.Var;
-
-import java.awt.event.ActionEvent;
-import java.awt.Container;
-import java.awt.BorderLayout;
-import javax.swing.JLabel;
-import javax.swing.JFrame;
-
-import javax.swing.JPanel;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import org.apache.log4j.Logger;
 import org.protege.editor.owl.ui.action.ProtegeOWLAction;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
 
 
 public class NreplMenu extends ProtegeOWLAction {
@@ -50,11 +43,14 @@ public class NreplMenu extends ProtegeOWLAction {
     }
 
 
+    public static void main(String[] args) {
+    }
+
 
 
     public void actionPerformed(ActionEvent event) {
         Thread.currentThread().
-            setContextClassLoader(cl);
+                setContextClassLoader(cl);
 
         final JFrame frame = new JFrame("REPL connect");
         final Container cp = frame.getContentPane();
@@ -67,44 +63,44 @@ public class NreplMenu extends ProtegeOWLAction {
         frame.repaint();
 
         final Runnable after = new Runnable(){
-                public void run(){
-                    Thread.currentThread().setContextClassLoader(cl);
-                    Var newDialog = RT.var("protege.dialog", "new-dialog-panel");
-                    cp.removeAll();
-                    JPanel dialog = (JPanel)newDialog.
+            public void run(){
+                Thread.currentThread().setContextClassLoader(cl);
+                Var newDialog = RT.var("protege.dialog", "new-dialog-panel");
+                cp.removeAll();
+                JPanel dialog = (JPanel)newDialog.
                         invoke(getOWLEditorKit());
 
-                    cp.add(dialog);
-                    frame.pack();
-                    frame.setVisible(true);
-                    frame.validate();
-                    frame.repaint();
+                cp.add(dialog);
+                frame.pack();
+                frame.setVisible(true);
+                frame.validate();
+                frame.repaint();
 
-                }
-            };
+            }
+        };
 
         final Runnable before = new Runnable(){
-                public void run(){
-                    Thread.currentThread().setContextClassLoader(cl);
-                    try{
-                        if(!clojureInit){
-                            synchronized(lock){
-                                RT.loadResourceScript("protege/dialog.clj");
-                                RT.loadResourceScript("protege/nrepl.clj");
-                                initLabel.setText("Reading User Init");
-                                Var init = RT.var("protege.nrepl","init");
-                                init.invoke();
-                                clojureInit=true;
-                            }
+            public void run(){
+                Thread.currentThread().setContextClassLoader(cl);
+                try{
+                    if(!clojureInit){
+                        synchronized(lock){
+                            RT.loadResourceScript("protege/dialog.clj");
+                            RT.loadResourceScript("protege/nrepl.clj");
+                            initLabel.setText("Reading User Init");
+                            Var init = RT.var("protege.nrepl","init");
+                            init.invoke();
+                            clojureInit=true;
                         }
-                        SwingUtilities.invokeAndWait(after);
+                    }
+                    SwingUtilities.invokeAndWait(after);
 
-                    }
-                    catch(Exception exp){
-                        throw new RuntimeException(exp);
-                    }
                 }
-            };
+                catch(Exception exp){
+                    throw new RuntimeException(exp);
+                }
+            }
+        };
 
         new Thread(before).start();
     }
