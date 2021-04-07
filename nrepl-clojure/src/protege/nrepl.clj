@@ -1,6 +1,7 @@
 (ns protege.nrepl
   (:require [cider.nrepl :refer [cider-nrepl-handler]]
             [clojure.java.io :as io]
+            [clojure.pprint :as pp]
             [nrepl.server :as nrepl]
             [protege.model :as protege]))
 
@@ -33,6 +34,7 @@
 
 (defn start-server
   ([editorkit port]
+   (pp/pprint "hello")
    (binding [protege.model/*owl-editor-kit*    editorkit
              protege.model/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
              protege.model/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]

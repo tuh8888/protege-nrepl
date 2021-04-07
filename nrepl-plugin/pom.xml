@@ -6,8 +6,15 @@
 
     <groupId>ucdenver.ccp</groupId>
     <artifactId>protege-nrepl</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.2.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
+    <repositories>
+        <repository>
+            <id>clojars.org</id>
+            <name>Clojars</name>
+            <url>https://repo.clojars.org</url>
+        </repository>
+    </repositories>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -17,11 +24,16 @@
         <dependency>
             <groupId>ucdenver.ccp</groupId>
             <artifactId>nrepl-clojure</artifactId>
-            <version>0.2.0-SNAPSHOT-standalone</version>
+            <version>0.2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>edu.stanford.protege</groupId>
             <artifactId>protege-editor-owl</artifactId>
+            <version>5.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.stanford.protege</groupId>
+            <artifactId>protege-editor-core</artifactId>
             <version>5.5.0</version>
         </dependency>
         <dependency>
@@ -65,10 +77,34 @@
             <artifactId>guice</artifactId>
             <version>5.0.1</version>
         </dependency>
+        <dependency>
+            <groupId>nrepl</groupId>
+            <artifactId>nrepl</artifactId>
+            <version>0.8.3</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1</version>
+                <executions>
+                    <execution>
+                        <id>compile-with-lein</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>lein</executable>
+                    <commandlineArgs>install</commandlineArgs>
+                    <workingDirectory>../nrepl-clojure</workingDirectory>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -86,7 +122,6 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-
                         <Bundle-Name>Protege nREPL</Bundle-Name>
                         <Bundle-Activator>org.protege.editor.owl.ProtegeOWL</Bundle-Activator>
                         <Bundle-ClassPath>.</Bundle-ClassPath>
@@ -110,6 +145,7 @@
                         <DynamicImport-Package>*</DynamicImport-Package>
                         <Embed-Transitive>true</Embed-Transitive>
                         <Embed-Dependency>
+                            nrepl,
                             guice,
                             clojure, core.specs.alpha, spec.alpha,
                             nrepl-clojure,
