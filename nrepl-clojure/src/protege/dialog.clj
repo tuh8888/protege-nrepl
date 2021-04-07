@@ -9,24 +9,19 @@
 ;; map between model manager and port
 (def servers (ref {}))
 
-(defn action-listener [f]
-  (proxy [ActionListener] []
-    (actionPerformed [event]
-      (f event))))
-
-(defn start-server-action [editorkit connect disconnect status event]
+(defn start-server-action [editorkit connect disconnect port-field status]
   (dosync
-    (let [s (protege-nrepl/start-server
-              editorkit
-              @last-port)]
+    (let [port (Integer/parseInt (.getText port-field))
+          s    (protege-nrepl/start-server
+                 editorkit port)]
       (alter servers merge {editorkit s})
       (.setEnabled disconnect true)
       (.setEnabled connect false)
       (.setText status
-        (str "Connected on port: " @last-port))
-      (alter last-port inc))))
+        (str "Connected on port: " port))
+      (ref-set last-port port))))
 
-(defn stop-server-action [editorkit connect disconnect status event]
+(defn stop-server-action [editorkit connect disconnect status]
   (dosync
     (let [s (get @servers editorkit)]
       (alter servers dissoc editorkit)
@@ -48,22 +43,24 @@
         port-field     (JTextField. (str @last-port) 20)
         status-label   (JLabel. "Disconnected")
         connect-btn    (JButton. "Connect")
-        disconnect-btn (JButton. "Disconnect")
-        connect-fn     (partial start-server-action
-                         editorkit
-                         connect-btn disconnect-btn
-                         status-label)]
-    (.addActionListener connect-btn
-      (action-listener connect-fn))
+        disconnect-btn (JButton. "Disconnect")]
+    (doto connect-btn
+      (.addActionListener (proxy [ActionListener] []
+                            (actionPerformed [_]
+                              (start-server-action
+                                editorkit
+                                connect-btn disconnect-btn
+                                port-field status-label)))))
     (doto disconnect-btn
       (.setEnabled false)
-      (.addActionListener (action-listener
-                            (partial stop-server-action
-                              editorkit connect-btn disconnect-btn
-                              status-label))))
+      (.addActionListener (proxy [ActionListener] []
+                            (actionPerformed [_]
+                              (stop-server-action
+                                editorkit connect-btn disconnect-btn
+                                status-label)))))
 
-    (when @protege/auto-connect-on-default
-      (connect-fn nil))
+    #_(when @protege/auto-connect-on-default
+        (connect-fn nil))
 
     (doto pn
       (.setLayout (BorderLayout.))
@@ -84,9 +81,10 @@
     pn))
 
 (defn new-dialog [manager]
-  (let [fm (javax.swing.JFrame.)
-        cp (.getContentPane fm)]
-    (.add cp (new-dialog-panel manager))
-    (.pack fm)
-    (.setVisible fm true)
-    fm))
+  (doto (javax.swing.JFrame.)
+    (.. getContentPane (add (new-dialog-panel manager)))
+    (.pack)
+    (.setVisible true)))
+
+(comment
+  (new-dialog nil))
