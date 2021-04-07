@@ -29,42 +29,6 @@
                       (catch Exception e
                         (.printStackTrace e))))))))
 
-;; hook system -- identical to tawny.util -- ah well!
-(defn make-hook
-  "Make a hook."
-  []
-  (atom []))
-
-(defn add-hook
-  "Add func to hook."
-  [hook func]
-  (when-not
-      (some #{func} @hook)
-    (swap! hook conj func))
-  @hook)
-
-(defn remove-hook
-  "Remove func from hook."
-  [hook func]
-  (swap! hook
-    (partial
-      remove #{func})))
-
-(defn clear-hook
-  "Empty the hook."
-  [hook]
-  (reset! hook []))
-
-(defn run-hook
-  "Run the hook with optional arguments. Hook functions are run in the order
-  that they were added."
-  ([hook]
-   (doseq [func @hook] (func)))
-  ([hook & rest]
-   (doseq [func @hook] (apply func rest))))
-
-(def start-server-hook (make-hook))
-
 (def servers (atom {}))
 
 (defn start-server
@@ -72,7 +36,6 @@
    (binding [protege.model/*owl-editor-kit*    editorkit
              protege.model/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
              protege.model/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]
-     (run-hook start-server-hook)
      (let [server
            (nrepl/start-server
              :port port
