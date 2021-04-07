@@ -2,8 +2,8 @@ Protege-Nrepl
 =============
 
 This is a plugin for the Protege Ontology Editor, which enables
-[nrepl](https://github.com/clojure/tools.nrepl) connection to an existing
-editor. The [pomegranate](https://github.com/cemerick/pomegranate) library is
+[nrepl](https://github.com/nrepl/nrepl) connection to an existing
+editor. The [pomegranate](https://github.com/clj-commons/pomegranate) library is
 included in the bundle, which means that new maven dependencies or classpath
 directories can be added dynamically. Access to the Protege internal data
 structures is possible, meaning that the Protege instance can be manipulated
@@ -16,18 +16,18 @@ the OWL API, so a specialized build of Protege is needed.
 
 ## Build
 
-Both maven and leiningen are required to build the plugin. To build,
+Both maven and clojure-cli are required to build the plugin. To build, simply
 
-    cd nrepl-plugin
-    mvn install
+    build.sh
 
-A small `build.sh` script is included which copies the jar file into protege.
+This script uses helper scripts provided in the ./scripts/ directory. These uberjar the clojure-nrepl
+library, install it to the local maven repository, build the plugin, and copy it to protege's
+/plugins/ directory.
 
 ## Usage
 
-Install the plugin as a normal Protege plugin. This adds a single menu item
-into "Tools", called NREPL, which can be used to launch a REPL for the current
-Protege workspace.
+Install the plugin as a normal Protege plugin. This adds a single top level menu item called NREPL,
+which can be used to launch a REPL for the current Protege workspace.
 
 The `protege.model` Clojure namespace provides a number of different vars,
 dynamically scoped to the current workspace which you can use to affect the
