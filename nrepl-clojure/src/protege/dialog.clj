@@ -104,7 +104,6 @@
   (reset! server (http/start-server websocket/handler {:port 10002}))
 
 
-  (compile 'protege.OWLOntologyChangeListenerImpl.)
   (-> protege.model/*owl-model-manager*
     bean
     keys)
