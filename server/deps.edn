@@ -7,6 +7,7 @@
  :aliases {;; generic depstar alias, use with jar or uberjar function name:
            :depstar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.0.211"}}
                      :ns-default   hf.depstar
-                     :exec-args    {:jar         "target/nrepl-clojure.jar"
-                                    :artifact-id "nrepl-clojure"
-                                    :group-id    "ucdenver.ccp"}}}}
+                     :exec-args    {:group-id    "ucdenver.ccp"
+                                    :artifact-id "protege-nrepl-server"
+                                    ;; Version is specified by build script.
+                                    :sync-pom    true}}}}

@@ -12,7 +12,7 @@
 
    This script uses helper scripts provided in the ./scripts/ directory. These uberjar the clojure-nrepl library, install it to the local maven repository, build the plugin, and copy it to protege's /plugins/ directory.
 
-   Uberjarring [[file:nrepl-clojure/]] is performed using [[https://github.com/seancorfield/depstar][depstar]]. This gets all of the dependencies it needs into a single jar so they are available to OSGi.
+   Uberjarring [[file:protege-nrepl-server]] is performed using [[https://github.com/seancorfield/depstar][depstar]]. This gets all of the dependencies it needs into a single jar so they are available to OSGi.
 
 ** Usage
 

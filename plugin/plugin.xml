@@ -16,7 +16,7 @@
         <name value="Start"/>
         <toolTip value="Start an nREPL server"/>
         <class value="ucdenver.ccp.protege.nrepl.NreplMenu"/>
-        <path value="protege-nrepl.menu.topNrepl/SlotCR-A"/>
+        <path value="protege-nrepl-plugin.menu.topNrepl/SlotCR-A"/>
         <editorKitId value="OWLEditorKit"/>
     </extension>
 
