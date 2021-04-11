@@ -1,4 +1,5 @@
 cd server
+rm pom.xml
 clojure -X:depstar uberjar \
         :version \"${RELEASE_VERSION}\" \
         :jar \"target/protege-nrepl-server-${RELEASE_VERSION}.jar\"
