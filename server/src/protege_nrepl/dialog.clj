@@ -92,29 +92,8 @@
       (.add port-field BorderLayout/CENTER))
     pn))
 
-(defonce server (atom nil))
-
 (defn new-dialog [manager]
   (doto (javax.swing.JFrame.)
     (.. getContentPane (add (new-dialog-panel manager)))
     (.pack)
     (.setVisible true)))
-
-(comment
-  (reset! server (http/start-server websocket/handler {:port 10002}))
-
-
-  (-> protege/*owl-model-manager*
-    bean
-    keys)
-  (def owl-changes (atom []))
-  (.addOntologyChangeListener protege/*owl-model-manager*
-    (proxy [OWLOntologyChangeListener] []
-      (ontologiesChanged [changes]
-        (println "bye")
-        (reset! owl-changes (map bean changes)))))
-
-  (->> @owl-changes
-    first
-    vals
-    (map type)))

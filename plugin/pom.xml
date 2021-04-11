@@ -65,14 +65,20 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
+                        <!-- _fixupmessages needed because javax.xml (required for transit-clj) provides a class for java 9. -->
+                        <!-- This means this may not work with java 9 -->
+                        <!-- See https://issues.apache.org/jira/browse/FELIX-5592 -->
+                        <_fixupmessages>"Classes found in the wrong directory";is:=warning</_fixupmessages>
+
                         <Bundle-Name>Protege nREPL</Bundle-Name>
                         <Bundle-Activator>org.protege.editor.owl.ProtegeOWL</Bundle-Activator>
                         <Bundle-ClassPath>.</Bundle-ClassPath>
                         <Bundle-SymbolicName>${project.artifactId};singleton:=true</Bundle-SymbolicName>
                         <Bundle-Vendor>UC Denver CCP</Bundle-Vendor>
+                        <Multi-Release>true</Multi-Release>
                         <Import-Package>
                             !groovy.lang,
-                            !com.sun.java.swing.*, !com.sun.org.*,
+                            !com.sun.java.swing.*, !com.sun.org.*, !com.sun.jdi*,
                             !com.google.*,
                             !javax.jms, !javax.mail*, !javax.servlet*,
                             !net.sf.ehcache, !net.spy.memcached,

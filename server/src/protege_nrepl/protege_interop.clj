@@ -46,3 +46,17 @@
    (-> workspace
      .getOWLSelectionModel
      (.setSelectedObject entity))))
+
+(def ont-listeners (atom nil))
+
+(defn add-ont-listener! [listener]
+  (swap! ont-listeners (fn [listeners]
+                         (.addOntologyChangeListener
+                           *owl-model-manager*
+                           listener)
+                         (conj listeners listener))))
+
+(defn remove-ont-listeners! []
+  (doseq [listener @ont-listeners]
+    (.removeOntologyChangeListener *owl-model-manager* listener))
+  (reset! ont-listeners nil))
