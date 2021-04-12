@@ -1,10 +1,10 @@
-{:deps    {org.clojure/clojure       {:mvn/version "1.7.0"}
-           nrepl/nrepl               {:mvn/version "0.8.3"}
-           clj-commons/pomegranate   {:mvn/version "1.2.0"}
-           compojure/compojure       {:mvn/version "1.6.2"}
-           aleph/aleph               {:mvn/version "0.4.1"}
-           org.clojure/core.async    {:mvn/version "1.3.610"}
-           com.cognitect/transit-clj {:mvn/version "1.0.324"}}
+{:deps    {org.clojure/clojure                             {:mvn/version "1.7.0"}
+           nrepl/nrepl                                     {:mvn/version "0.8.3"}
+           clj-commons/pomegranate                         {:mvn/version "1.2.0"}
+           compojure/compojure                             {:mvn/version "1.6.2"}
+           aleph/aleph                                     {:mvn/version "0.4.1"}
+           org.clojure/core.async                          {:mvn/version "1.3.610"}
+           ring-transit-middleware/ring-transit-middleware {:mvn/version "0.1.3"}}
  :aliases {;; generic depstar alias, use with jar or uberjar function name:
            :depstar {:replace-deps {com.github.seancorfield/depstar {:mvn/version "2.0.211"}}
                      :ns-default   hf.depstar
