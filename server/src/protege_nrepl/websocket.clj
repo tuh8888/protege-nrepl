@@ -5,11 +5,12 @@
             [manifold.deferred :as d]
             [manifold.stream :as s]
             [ring.middleware.params :as params]
+            [clojure.java.data :as j]
             [cognitect.transit :as t]
             [protege-nrepl.protege-interop :as protege]
             [ring.middleware.transit :refer [encode]])
   (:import [java.io ByteArrayOutputStream]
-           #_[org.semanticweb.owlapi.model OWLOntologyChangeListener]))
+           [org.semanticweb.owlapi.model OWLOntologyChangeListener]))
 
 (def non-websocket-request
   {:status  400
@@ -49,31 +50,49 @@
 (comment
   (def port 10003)
   (do (swap! server (fn [server]
-                      (.close server)
-                      (http/start-server handler {:port port})))
+                      (when server
+                        (.close server))
+                      (http/start-server handler {:port 10003})))
 
       (reset! ontology-changes (s/stream 100))
 
-      (s/try-put! @ontology-changes {:hi "there"} 100.0)))
+      (s/try-put! @ontology-changes {:hi "there"} 100.0))
+  (s/try-put! @ontology-changes {:hi "there"} 100.0))
 
+(def owl-changes (atom []))
+
+(defn make-ont-listener []
+  (proxy [OWLOntologyChangeListener] []
+    (ontologiesChanged [changes]
+      (println "Changes:" (count changes))
+      (try
+        (let [bean-changes (seq (j/from-java changes))]
+          #_(println "Success?" @(s/try-put! @ontology-changes bean-changes 100))
+          (reset! owl-changes {:changes  bean-changes
+                               :success? true}))
+        (catch StackOverflowError e
+          (println "Failure")
+          (reset! owl-changes {:changes  changes
+                               :success? false}))))))
 
 (comment
-  (def owl-changes (atom []))
-
-  (defn make-ont-listener []
-    (proxy [OWLOntologyChangeListener] []
-      (ontologiesChanged [changes]
-        (let [bean-changes (map bean changes)]
-          (println "Success?" @(s/try-put! @ontology-changes "hello" 100))
-          (reset! owl-changes bean-changes)))))
-
-  (protege/add-ont-listener! (make-ont-listener))
 
   (count @protege/ont-listeners)
   (protege/remove-ont-listeners!)
 
-  (->> @owl-changes
+  (protege/add-ont-listener! (make-ont-listener))
+
+  (-> @owl-changes
+    :changes
     first
-    keys
-    #_vals
-    #_(map type)))
+    str
+    #_#_#_#_#_
+    (j/from-java-shallow {:omit #{:ontology
+                                  :signature}})
+    :changeData
+    (j/from-java-shallow {})
+    :axiom
+    str
+    #_#_
+    (j/from-java-shallow {})
+    :axiomType))
