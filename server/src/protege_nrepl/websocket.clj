@@ -8,7 +8,8 @@
             [clojure.java.data :as j]
             [cognitect.transit :as t]
             [protege-nrepl.protege-interop :as protege]
-            [ring.middleware.transit :refer [encode]])
+            [ring.middleware.transit :refer [encode]]
+            [tawny.render :as tr])
   (:import [java.io ByteArrayOutputStream]
            [org.semanticweb.owlapi.model OWLOntologyChangeListener]))
 
@@ -68,7 +69,8 @@
       (try
         (let [bean-changes (seq (j/from-java changes))]
           #_(println "Success?" @(s/try-put! @ontology-changes bean-changes 100))
-          (reset! owl-changes {:changes  bean-changes
+          (reset! owl-changes {:bean     bean-changes
+                               :changes  changes
                                :success? true}))
         (catch StackOverflowError e
           (println "Failure")
@@ -82,10 +84,25 @@
 
   (protege/add-ont-listener! (make-ont-listener))
 
+  (require '[clojure.pprint :as pp])
   (-> @owl-changes
     :changes
-    first
-    str
+    (j/from-java)
+    #_
+    j/from-java
+    #_(->>
+        #_(filter #(= :SubClassOf (get-in % [:axiom :axiomType])))
+        (map protege/simplify-axiom))
+    #_(pp/pprint)
+    #_(->> (map :axiom)
+        (map :axiomType))
+    #_(j/from-java-shallow {:omit #{:ontology
+                                    :signature}})
+    #_tr/as-form
+
+    #_bean
+    #_tr/as-form
+    #_tr/as-form
     #_#_#_#_#_
     (j/from-java-shallow {:omit #{:ontology
                                   :signature}})

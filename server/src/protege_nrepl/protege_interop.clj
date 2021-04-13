@@ -16,7 +16,18 @@
 ;; along with this program. If not, see http://www.gnu.org/licenses/.
 
 (ns protege-nrepl.protege-interop
-  (:require [clojure.java.data :as j]))
+  (:require [clojure.java.data :as j]
+            [tawny.render :as tr])
+  (:import [org.semanticweb.owlapi.model
+            OWLAxiom
+            OWLAxiomChange
+            OWLEntity
+            AxiomType
+            OWLLiteral
+            IRI
+            OWLClassExpression
+            ClassExpressionType]
+           [org.semanticweb.owlapi.change AxiomChangeData]))
 
 (def ^{:dynamic true
        :doc     "The OWLModelManager for the Protege Instance from which the REPL is launched."}
@@ -67,61 +78,91 @@
     (map (juxt key (comp f val)))
     (into {})))
 
-(defmethod j/from-java org.semanticweb.owlapi.model.IRI
+(defmethod j/from-java OWLAxiom
   [instance]
   (-> instance
-    (j/from-java-shallow {})
-    #_(select-keys [:fragment :namespace])))
-
-(defmethod j/from-java org.semanticweb.owlapi.model.OWLClass
-  [instance]
-  (j/from-java (.getIRI instance)))
-
-(defn axiom-from-java
-  [instance ks]
-  (-> instance
-    (j/from-java-shallow {})
-    (select-keys (conj ks :axiomType))
+    (j/from-java-shallow {:omit #{:signature :ontology
+                                  :dataPropertiesInSignature
+                                  :objectPropertiesInSignature
+                                  :annotationPropertiesInSignature
+                                  :classesInSignature
+                                  :datatypesInSignature
+                                  :nestedClassExpressions
+                                  :NNF
+                                  :axiomWithoutAnnotations
+                                  :individualsInSignature}})
     (->> (map-vals j/from-java))))
 
-(defmethod j/from-java org.semanticweb.owlapi.model.OWLSubClassOfAxiom
-  [instance]
-  (axiom-from-java instance [:subClass :superClass]))
-
-(defmethod j/from-java org.semanticweb.owlapi.model.OWLDeclarationAxiom
-  [instance]
-  (axiom-from-java instance [:entity]))
-
-(defmethod j/from-java org.semanticweb.owlapi.model.AxiomType
+(defmethod j/from-java OWLClassExpression
   [instance]
   (-> instance
-    (j/from-java-shallow {})
-    :name
+    (j/from-java-shallow {:omit #{:signature :ontology
+                                  :dataPropertiesInSignature
+                                  :objectPropertiesInSignature
+                                  :annotationPropertiesInSignature
+                                  :classesInSignature
+                                  :datatypesInSignature
+                                  :nestedClassExpressions
+                                  :objectComplementOf
+                                  :NNF
+                                  :complementNNF
+                                  :axiomWithoutAnnotations
+                                  :individualsInSignature}})
+    (->> (map-vals j/from-java))))
+
+(prefer-method j/from-java OWLEntity OWLClassExpression)
+
+(defmethod j/from-java OWLAxiomChange
+  [instance]
+  (let [{:keys [axiom addAxiom]} (-> instance
+                                   (j/from-java-shallow {:omit #{:signature :ontology
+                                                                 :dataPropertiesInSignature
+                                                                 :objectPropertiesInSignature
+                                                                 :annotationPropertiesInSignature
+                                                                 :classesInSignature
+                                                                 :datatypesInSignature
+                                                                 :nestedClassExpressions
+                                                                 :NNF
+                                                                 :changeData
+                                                                 :changeRecord
+                                                                 :axiomWithoutAnnotations
+                                                                 :individualsInSignature}}))]
+    (-> axiom
+      j/from-java
+      (assoc :change (if addAxiom :added :removed)))
+    ))
+
+
+(defmethod j/from-java AxiomType
+  [instance]
+  (-> instance
+    (.getName)
     keyword))
 
-(defmethod j/from-java org.semanticweb.owlapi.model.OWLAxiomChange
+(defmethod j/from-java ClassExpressionType
   [instance]
   (-> instance
-    (j/from-java-shallow {})
-    (select-keys [:changeData,
-                  :changeRecord,
-                  :ontology,
-                  :removedAxiom,
-                  :isAddAxiom,
-                  :isAxiomChange,
-                  :isImportChange,
-                  :isRemoveAxiom,
-                  :reverseChange])
-    (->> (map-vals j/from-java))))
+    (.getName)
+    keyword))
 
-(defmethod j/from-java org.semanticweb.owlapi.model.OWLOntology
+(defn simplify-axiom [a]
+  (-> a
+    (select-keys [:axiomType :classExpressionType
+                  :filler
+                  :change
+                  :subClass :superClass
+                  :superProperty :subProperty
+                  :property :value :subject
+                  :entity])))
+
+(defmethod j/from-java OWLEntity
   [instance]
-  (-> instance
-    (j/from-java-shallow {:omit #{:OWLOntologyManager}})
-    (select-keys [:ontologyID])
-    (update :ontologyID (fn [id]
-                          (-> id
-                            (j/from-java-shallow {})
-                            :defaultDocumentIRI
-                            (.get)
-                            j/from-java)))))
+  (tr/as-form instance))
+
+(defmethod j/from-java OWLLiteral
+  [instance]
+  (tr/as-form instance))
+
+(defmethod j/from-java IRI
+  [instance]
+  (tr/as-form instance))
