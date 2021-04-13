@@ -38,8 +38,8 @@
      (binding [protege/*owl-editor-kit*    editorkit
                protege/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
                protege/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]
-       (let [server (nrepl/start-server :port port)]
-         (ref-set server server))))))
+       (let [s (nrepl/start-server :port port)]
+         (ref-set server s))))))
 
 (defn stop-server []
   (nrepl/stop-server @server)

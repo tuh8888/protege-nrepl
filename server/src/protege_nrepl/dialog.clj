@@ -50,9 +50,7 @@
       (.setEnabled false)
       (.addActionListener (proxy [ActionListener] []
                             (actionPerformed [_]
-                              (stop-server-action
-                                connect-btn disconnect-btn
-                                status-label)))))
+                              (stop-server-action components)))))
 
     (doto pn
       (.setLayout (BorderLayout.))
