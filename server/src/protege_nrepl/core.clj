@@ -28,18 +28,19 @@
                       (catch Exception e
                         (.printStackTrace e))))))))
 
-(def servers (atom {}))
+(def server (ref nil))
+
+;; map between model manager and port
 
 (defn start-server
   ([editorkit port]
-   (binding [protege/*owl-editor-kit*    editorkit
-             protege/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
-             protege/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]
-     (let [server
-           (nrepl/start-server
-             :port port)]
-       (swap! servers assoc editorkit server)))))
+   (dosync
+     (binding [protege/*owl-editor-kit*    editorkit
+               protege/*owl-work-space*    (when editorkit (.getOWLWorkspace editorkit))
+               protege/*owl-model-manager* (when editorkit (.getOWLModelManager editorkit))]
+       (let [server (nrepl/start-server :port port)]
+         (ref-set server server))))))
 
-(defn stop-server [editorkit server]
-  (swap! servers dissoc editorkit)
-  (nrepl/stop-server server))
+(defn stop-server []
+  (nrepl/stop-server @server)
+  (ref-set server nil))
